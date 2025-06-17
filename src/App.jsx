@@ -15,15 +15,15 @@ function App() {
   const [user, setUser] = useState(null);
   
   
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    setUser(user);
-  },
-   []);
+  // useEffect(() => {
+  //   const user = localStorage.getItem("user");
+  //   setUser(user);
+  // },
+  //  []);
   
   return (
     <>
-    {user ? <Navbar /> : null}
+    {/* {user ? <Navbar /> : null} */}
       <Routes>
         <Route index element={<Login />} />
         <Route path="/signup" element={<Signup />} />

@@ -12,8 +12,9 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { Link } from "react-router-dom";
-
+import { Link, Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useState } from "react";
 // const pages = ['Products', 'Pricing', 'Blog'];
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const pages = [
@@ -29,12 +30,23 @@ const pages = [
     title: "Create Blog",
     url: "/createblog",
   },
+  {
+    title: "Signout",
+    url: "/",
+    isSignout: true,
+  },
 ];
+
+  const signOut = () => {
+    localStorage.clear();
+    setIsLoggedIn(false);
+  };
+
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("user"));
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -50,12 +62,18 @@ function Navbar() {
     setAnchorElUser(null);
   };
 
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    setIsLoggedIn(!!user);
+  }, []);
+
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
-          <Link to={"/"}>
+          <Link to={"/"} style={{ textDecoration: "none" }}>
             <Typography
               variant="h5"
               noWrap
@@ -72,7 +90,7 @@ function Navbar() {
           </Link>
 
           {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
-          <Link to={"/"}>
+          <Link to={"/"} style={{ textDecoration: "none" }}>
             <Typography
               variant="h5"
               noWrap
@@ -96,7 +114,12 @@ function Navbar() {
           >
             {/* desktop manu */}
             {pages.map((page) => (
-              <Link key={page.title} to={page.url} textDecoration="none">
+              <Link
+                key={page.title}
+                to={page.url}
+                onClick={page.isSignout ? signOut : null}
+                style={{ textDecoration: "none" }}
+              >
                 <Button
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: "white", display: "block" }}
@@ -124,7 +147,7 @@ function Navbar() {
           >
             {pages.map((page) => (
               <MenuItem key={page.title} onClick={handleCloseNavMenu}>
-                <Link to={page.url}>
+                <Link to={page.url} style={{ textDecoration: "none" }}>
                   {" "}
                   <Typography sx={{ textAlign: "center" }}>
                     {page.title}

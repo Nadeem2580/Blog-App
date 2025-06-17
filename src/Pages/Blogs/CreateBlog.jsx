@@ -15,6 +15,7 @@ import { ToastAlert } from "../../Utils/Utility";
 import axios from "axios";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../Fireabse";
+import Navbar from "../../Component/Navbar";
 const Secret_Key = `TnvXHWhhxJlZVCGWzyBZ_oRfpUQ`;
 const CLOUD_NAME = `dihxsnmam`;
 
@@ -92,6 +93,7 @@ const CreateBlog = () => {
 
   return (
     <>
+    <Navbar />
       <Stack
         sx={{
           width: { xs: "100%", sm: "90%", md: "80%", lg: "70%", xl: "50%" },

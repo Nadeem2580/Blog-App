@@ -44,7 +44,7 @@ const Login = () => {
       const docSnap = await getDoc(docRef);
       console.log(docSnap.data());
       if (docSnap.data().type !== "admin") {
-        navigate("/userDashboard");
+        navigate("/blog");
       }
       localStorage.setItem("user",JSON.stringify(docSnap.data()));
       ToastAlert({
