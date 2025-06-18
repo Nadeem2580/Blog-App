@@ -4,7 +4,6 @@ import { Route, Routes } from "react-router-dom";
 import Login from "./Pages/Auth/Login";
 import Signup from "./Pages/Auth/Signup";
 import Navbar from "./Component/Navbar";
-import Blog from "./Pages/Blogs/Blog";
 import AllBlogs from "./Pages/Blogs/AllBlogs";
 import CreateBlog from "./Pages/Blogs/CreateBlog";
 import { Bounce, ToastContainer } from "react-toastify";

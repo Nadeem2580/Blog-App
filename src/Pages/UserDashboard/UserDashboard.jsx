@@ -3,7 +3,7 @@ import { blue } from "@mui/material/colors";
 import React, { useEffect, useState } from "react";
 import Cards from "../../Component/Cards";
 import { ToastAlert } from "../../Utils/Utility";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../Fireabse";
 import Navbar from "../../Component/Navbar";
 
@@ -16,7 +16,10 @@ const UserDashboard = () => {
 
   const fetchData = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, "Blogs"));
+const citiesRef = collection(db, "Blogs");
+const q = query(collection(db, "Blogs"), where("status", "==", false));
+const querySnapshot = await getDocs(q);
+
       const blogData = [];
 
       querySnapshot.forEach((doc) => {
