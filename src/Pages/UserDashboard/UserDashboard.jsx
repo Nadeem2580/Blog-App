@@ -6,6 +6,7 @@ import { ToastAlert } from "../../Utils/Utility";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../Fireabse";
 import Navbar from "../../Component/Navbar";
+import { Link } from "react-router-dom";
 
 const UserDashboard = () => {
   const [blogs, setBlogs] = useState([]);
@@ -16,27 +17,14 @@ const UserDashboard = () => {
 
   const fetchData = async () => {
     try {
-const citiesRef = collection(db, "Blogs");
-const q = query(collection(db, "Blogs"), where("status", "==", false));
-const querySnapshot = await getDocs(q);
-
-      const blogData = [];
-
+      const querySnapshot = await getDocs(collection(db, "Blogs"));
+      const tempArr = [];
       querySnapshot.forEach((doc) => {
-        blogData.push({
-          UID: doc.data().UId,
-          id: doc.id,
-          title: doc.data().blogTitle,
-          subject: doc.data().blogSubject,
-          content: doc.data().blogContent,
-          image: doc.data().blogImage,
-        });
+        const obj = { ...doc.data(), id: doc.id };
+        tempArr.push(obj);
       });
+      setBlogs(tempArr);
 
-      {
-        console.log(blogs, "Blogs");
-      }
-      setBlogs(blogData);
     } catch (error) {
       ToastAlert({
         type: "error",
@@ -47,7 +35,7 @@ const querySnapshot = await getDocs(q);
 
   return (
     <>
-    <Navbar />
+      <Navbar />
       <Stack
         sx={{
           width: { xs: "100%", sm: "100%", md: "90%", lg: "80%" },
@@ -56,18 +44,12 @@ const querySnapshot = await getDocs(q);
       >
         <Grid container spacing={2}>
           {blogs.length > 0 ? (
-            blogs.map((blog) => (
-              <Cards
-                key={blog.id}
-                title={blog.title}
-                subject={blog.subject}
-                content={blog.content}
-                image={blog.image}
-                id={blog.id}
-                UID={blog.UID}
-                fetchData={fetchData}
-              />
-            ))
+            blogs.map((blog) =>
+              !blog.status ? (
+                
+                <Cards key={blog.id}  obj={blog} fetchData={fetchData} />
+              ) : null
+            )
           ) : (
             <Typography variant="h5" color="error" sx={{ mx: "auto", mt: 4 }}>
               No blog posts available.

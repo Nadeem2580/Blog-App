@@ -17,7 +17,7 @@ import { db } from "../Fireabse";
 import BasicModal from "./Modal";
 import { useState } from "react";
 
-const Cards = ({ title, subject, content, image, id, fetchData, UID }) => {
+const Cards = ({obj,  fetchData , actionBtn }) => {
   const [modal, setModel] = useState(false);
   const handleOpen = () => {
     setModel(true);
@@ -35,13 +35,13 @@ const Cards = ({ title, subject, content, image, id, fetchData, UID }) => {
   const deleteHandler = async (e) => {
     e.stopPropagation(); // prevents Link from triggering
     e.preventDefault(); // prevents Link navigation
-    await deleteDoc(doc(db, "Blogs", id));
+    await deleteDoc(doc(db, "Blogs", obj.id));
     fetchData();
   };
 
   return (
     <Grid size={12}>
-      <Link to={`/blog/${id}`} style={{ textDecoration: "none" }}>
+      <Link to={`/blog/${obj.id}`} style={{ textDecoration: "none" }}>
         <Card
           elevation={4}
           sx={{
@@ -54,8 +54,8 @@ const Cards = ({ title, subject, content, image, id, fetchData, UID }) => {
         >
           <CardMedia
             component="img"
-            src={image}
-            alt={title}
+            src={obj.blogImage}
+            alt={obj.blogTitle}
             sx={{
               width: { xs: "100%", sm: "300px", md: "350px" },
               height: { xs: "200px", sm: "100%" },
@@ -84,19 +84,19 @@ const Cards = ({ title, subject, content, image, id, fetchData, UID }) => {
                 }}
               >
                 <Typography variant="h6" fontWeight={600}>
-                  {title}
+                  {obj.blogTitle}
                 </Typography>
 
-                {UID == JSON.parse(localStorage.getItem("user")).uid ? (
+                {actionBtn && (
                   <Box sx={{ display: "flex", gap: "5px" }}>
                     <EditNoteIcon onClick={editHandler} />
                     <DeleteSweepIcon color="error" onClick={deleteHandler} />
                   </Box>
-                ) : null}
+                ) }
               </Box>
 
               <Typography variant="subtitle1" color="text.secondary">
-                Subject: {subject}
+                Subject: {obj.blogSubject}
               </Typography>
 
               <Typography
@@ -109,7 +109,7 @@ const Cards = ({ title, subject, content, image, id, fetchData, UID }) => {
                   textOverflow: "ellipsis",
                 }}
               >
-                {content}
+                {obj.blogContent}
               </Typography>
             </Box>
 
@@ -129,10 +129,10 @@ const Cards = ({ title, subject, content, image, id, fetchData, UID }) => {
       <BasicModal
         open={modal}
         close={handleClose}
-        title={title}
-        subject={subject}
-        content={content}
-        ID={id}
+        title={obj.blogTitle}
+        subject={obj.blogSubject}
+        content={obj.blogContent}
+        ID={obj.id}
         fetchData={fetchData}
       />
     </Grid>

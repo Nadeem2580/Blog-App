@@ -15,8 +15,6 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { Link, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
-// const pages = ['Products', 'Pricing', 'Blog'];
-// const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const pages = [
   {
     title: "Blog",
@@ -33,20 +31,12 @@ const pages = [
   {
     title: "Signout",
     url: "/",
-    isSignout: true,
   },
 ];
 
-  const signOut = () => {
-    localStorage.clear();
-    setIsLoggedIn(false);
-  };
-
-
 function Navbar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("user"));
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -62,17 +52,14 @@ function Navbar() {
     setAnchorElUser(null);
   };
 
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    setIsLoggedIn(!!user);
-  }, []);
-
+  const signout = () => {
+    localStorage.clear();
+  };
 
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
           <Link to={"/"} style={{ textDecoration: "none" }}>
             <Typography
               variant="h5"
@@ -89,7 +76,6 @@ function Navbar() {
             </Typography>
           </Link>
 
-          {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
           <Link to={"/"} style={{ textDecoration: "none" }}>
             <Typography
               variant="h5"
@@ -117,7 +103,7 @@ function Navbar() {
               <Link
                 key={page.title}
                 to={page.url}
-                onClick={page.isSignout ? signOut : null}
+                onClick={signout}
                 style={{ textDecoration: "none" }}
               >
                 <Button

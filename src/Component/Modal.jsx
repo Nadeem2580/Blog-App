@@ -103,7 +103,7 @@ export default function BasicModal({
             fullWidth
           />
           <Box sx={{ display: "flex", justifyContent: "end", gap: "10px" }}>
-            <Button variant="contained">Cancel</Button>
+            <Button variant="contained" onClick={close}>Cancel</Button>
             <Button variant="contained" onClick={saveHandler}>
               Save
             </Button>

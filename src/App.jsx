@@ -10,27 +10,34 @@ import { Bounce, ToastContainer } from "react-toastify";
 import UserDashboard from "./Pages/UserDashboard/UserDashboard";
 import NotFound from "./Pages/Notfound";
 import SingleBlog from "./Pages/SingleBlog";
+import Privateroute from "./Routes/Privateroute";
+import AuthRoutes from "./Routes/AuthRoutes";
 function App() {
-  const [user, setUser] = useState(null);
-  
-  
+  // const [user, setUser] = useState(null);
+
   // useEffect(() => {
   //   const user = localStorage.getItem("user");
   //   setUser(user);
   // },
   //  []);
-  
+
   return (
     <>
-    {/* {user ? <Navbar /> : null} */}
+      {/* {user ? <Navbar /> : null} */}
       <Routes>
-        <Route index element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/allblog" element={<AllBlogs />} />
-        <Route path="/createblog" element={<CreateBlog />} />
-        <Route path="/blog" element={<UserDashboard />} />
-        <Route path="/blog/:id" element={<SingleBlog />} />
-        <Route path="*" element={<NotFound/>} />
+        <Route path="*" element={<NotFound />} />
+
+        <Route element={<AuthRoutes />}>
+          <Route index element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Route>
+
+        <Route element={<Privateroute />}>
+          <Route path="/allblog" element={<AllBlogs />} />
+          <Route path="/createblog" element={<CreateBlog />} />
+          <Route path="/blog" element={<UserDashboard />} />
+          <Route path="/blog/:id" element={<SingleBlog />} />
+        </Route>
       </Routes>
 
       <ToastContainer
