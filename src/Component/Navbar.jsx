@@ -103,7 +103,7 @@ function Navbar() {
               <Link
                 key={page.title}
                 to={page.url}
-                onClick={signout}
+                 onClick={page.title === "Signout" ? signout : null}
                 style={{ textDecoration: "none" }}
               >
                 <Button

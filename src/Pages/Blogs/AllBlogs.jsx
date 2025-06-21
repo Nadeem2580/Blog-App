@@ -23,7 +23,6 @@ const AllBlogs = () => {
       });
 
       setBlogs(tempArr);
-
     } catch (error) {
       console.error("Error fetching documents:", error);
     }
@@ -40,9 +39,16 @@ const AllBlogs = () => {
       >
         <Grid container spacing={2}>
           {blogs.length > 0 ? (
-            blogs.map((blog) =>
-                blog.UId = UID &&
-                <Cards key={blog.id}  obj={blog} actionBtn={true}  fetchData={callData} />
+            blogs.map(
+              (blog) =>
+                (blog.UId = UID && (
+                  <Cards
+                    key={blog.id}
+                    obj={blog}
+                    actionBtn={true}
+                    // fetchData={callData}
+                  />
+                ))
             )
           ) : (
             <Typography variant="h5" color="error" sx={{ mx: "auto", mt: 4 }}>
