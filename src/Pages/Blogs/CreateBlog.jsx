@@ -93,7 +93,6 @@ const CreateBlog = () => {
 
   return (
     <>
-    <Navbar />
       <Stack
         sx={{
           width: { xs: "100%", sm: "90%", md: "80%", lg: "70%", xl: "50%" },

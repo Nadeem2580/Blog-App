@@ -71,12 +71,12 @@ const Signup = () => {
       );
       const uid = response.user.uid;
       
-     const sendProcess =  await setDoc(doc(db, "users", uid), {
+     const dataSendToFirebase =  await setDoc(doc(db, "users", uid), {
         fullName,
         email,
-        uid,
         type : "user",
-        isLogin : false
+        isLogin : true,
+        uid
       });
       ToastAlert({
         type: "success",

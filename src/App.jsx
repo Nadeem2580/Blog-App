@@ -12,14 +12,10 @@ import NotFound from "./Pages/Notfound";
 import SingleBlog from "./Pages/SingleBlog";
 import Privateroute from "./Routes/Privateroute";
 import AuthRoutes from "./Routes/AuthRoutes";
+import AdminDashboard from "./Pages/AdminDashboard/AdminDashboard";
+import RoleBaseRoute from "./Routes/RoleBaseRoute";
+import AdminBlogs from "./Pages/AdminDashboard/AdminBlogs";
 function App() {
-  // const [user, setUser] = useState(null);
-
-  // useEffect(() => {
-  //   const user = localStorage.getItem("user");
-  //   setUser(user);
-  // },
-  //  []);
 
   return (
     <>
@@ -38,6 +34,14 @@ function App() {
           <Route path="/blog" element={<UserDashboard />} />
           <Route path="/blog/:id" element={<SingleBlog />} />
         </Route>
+
+        <Route element={<RoleBaseRoute />}>
+          <Route path="/adminDashboard/Dashboard" element={<AdminDashboard />}/>
+          <Route path="/adminDashboard/Dashboard/allBlogs" element={<AdminBlogs />}/>
+          
+          
+          
+          </Route>
       </Routes>
 
       <ToastContainer

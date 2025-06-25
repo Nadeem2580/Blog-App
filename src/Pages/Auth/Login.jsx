@@ -41,17 +41,23 @@ const Login = () => {
       const response = await signInWithEmailAndPassword(auth, email, password);
       const uid = response.user.uid;
       const docRef = doc(db, "users", uid);
-      const docSnap = await getDoc(docRef);
-      console.log(docSnap.data());
-      if (docSnap.data().type !== "admin") {
-        navigate("/blog");
+      const userDataGet = await getDoc(docRef);
+      if (userDataGet.data().isLogin == false) {
+        ToastAlert({
+          type: "error",
+          message: "You are disabled by admin",
+        });
+        setIsLoading(false);
+        return;
       }
-      localStorage.setItem("user",JSON.stringify(docSnap.data()));
+
+      localStorage.setItem("user", JSON.stringify(userDataGet.data()));
       ToastAlert({
         type: "success",
         message: "User login successfully",
       });
       setIsLoading(false);
+      navigate("/blog");
     } catch (error) {
       setIsLoading(false);
       ToastAlert({

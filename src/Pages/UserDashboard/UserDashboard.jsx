@@ -35,7 +35,6 @@ const UserDashboard = () => {
 
   return (
     <>
-      <Navbar />
       <Stack
         sx={{
           width: { xs: "100%", sm: "100%", md: "90%", lg: "80%" },

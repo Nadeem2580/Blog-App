@@ -34,7 +34,7 @@ const pages = [
   },
 ];
 
-function Navbar() {
+function Navbar({children}) {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const handleOpenNavMenu = (event) => {
@@ -57,6 +57,7 @@ function Navbar() {
   };
 
   return (
+    <>
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -68,7 +69,7 @@ function Navbar() {
                 mr: 2,
                 display: { xs: "none", md: "flex" },
                 fontWeight: 700,
-                color: "inherit",
+                color:"white",
                 textDecoration: "none",
               }}
             >
@@ -162,6 +163,10 @@ function Navbar() {
         </Toolbar>
       </Container>
     </AppBar>
+    <Box sx={{ padding: 2 }}>
+      {children}
+    </Box>
+    </>
   );
 }
 export default Navbar;

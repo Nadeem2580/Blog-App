@@ -18,6 +18,7 @@ import BasicModal from "./Modal";
 import { useState } from "react";
 
 const Cards = ({obj,  fetchData , actionBtn }) => {
+  console.log(obj)
   const [modal, setModel] = useState(false);
   const handleOpen = () => {
     setModel(true);
