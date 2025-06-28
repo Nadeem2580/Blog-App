@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import UserDashboard from "../UserDashboard/UserDashboard";
 import Cards from "../../Component/Cards";
 import { Grid, Stack, Typography } from "@mui/material";
@@ -8,18 +8,23 @@ import { Link } from "react-router-dom";
 import Navbar from "../../Component/Navbar";
 
 const AllBlogs = () => {
+const [refresh, setRefresh] = useState(false);
   const [blogs, setBlogs] = useState([]);
   const UID = JSON.parse(localStorage.getItem("user")).uid;
   useEffect(() => {
     callData();
-  }, []);
+  }, [refresh]);
   const callData = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "Blogs"));
       const tempArr = [];
       querySnapshot.forEach((doc) => {
-        const obj = { ...doc.data(), id: doc.id };
-        tempArr.push(obj);
+       if(doc.data().UId ==UID ){
+
+         const obj = { ...doc.data(), id: doc.id };
+         tempArr.push(obj);
+       }
+       
       });
 
       setBlogs(tempArr);
@@ -45,7 +50,7 @@ const AllBlogs = () => {
                     key={blog.id}
                     obj={blog}
                     actionBtn={true}
-                    // fetchData={callData}
+                    setRefresh={setRefresh}
                   />
                 ))
             )

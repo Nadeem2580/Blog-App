@@ -32,20 +32,22 @@ export default function BasicModal({
   subject,
   content,
   ID,
-  fetchData
-}) {
+  setRefresh
+}) 
+
+{
   const [newtitle, setNewTitle] = useState("");
   const [newsubject, setNewSubject] = useState("");
   const [newcontent, setNewContent] = useState("");
   
-    useEffect(() => {
+  useEffect(() => {
     if (open) {
       setNewTitle(title);
       setNewSubject(subject);
       setNewContent(content);
     }
   }, [open, title, subject, content]);
-
+  
   
   const saveHandler = async () => {
     const washingtonRef = doc(db, "Blogs", ID);
@@ -56,18 +58,19 @@ export default function BasicModal({
       blogSubject: newsubject,
       blogContent: newcontent,
     });
-    fetchData()
+    setRefresh((prev => !prev))
     close();
-    console.log("save");
   };
   return (
     <Modal
+    onClick={(e) => e.stopPropagation()}
       open={open}
       onClose={close}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+    
     >
-      <Box sx={style}>
+      <Box sx={style}  >
         <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
           <Typography variant="h5">Edit Blog</Typography>
           <TextField

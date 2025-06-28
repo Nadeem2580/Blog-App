@@ -1,30 +1,29 @@
 import { Box, Grid, Stack, Typography } from "@mui/material";
 import { blue } from "@mui/material/colors";
-import React, { useEffect, useState } from "react";
 import Cards from "../../Component/Cards";
 import { ToastAlert } from "../../Utils/Utility";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../Fireabse";
-import Navbar from "../../Component/Navbar";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const UserDashboard = () => {
   const [blogs, setBlogs] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     fetchData();
-  }, []);
-
+  }, [refresh]);
   const fetchData = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "Blogs"));
+
       const tempArr = [];
       querySnapshot.forEach((doc) => {
         const obj = { ...doc.data(), id: doc.id };
         tempArr.push(obj);
       });
       setBlogs(tempArr);
-
     } catch (error) {
       ToastAlert({
         type: "error",
@@ -32,7 +31,6 @@ const UserDashboard = () => {
       });
     }
   };
-
   return (
     <>
       <Stack
@@ -45,8 +43,12 @@ const UserDashboard = () => {
           {blogs.length > 0 ? (
             blogs.map((blog) =>
               !blog.status ? (
-                
-                <Cards key={blog.id}  obj={blog} fetchData={fetchData} />
+                <Link
+                  to={`/blog/${blog.id}`}
+                  style={{ textDecoration: "none" , width:"100%" }}
+                >
+                  <Cards key={blog.id} obj={blog} setRefresh={setRefresh} />
+                </Link>
               ) : null
             )
           ) : (

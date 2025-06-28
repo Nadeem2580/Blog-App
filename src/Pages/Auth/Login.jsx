@@ -19,7 +19,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState("");
   const navigate = useNavigate();
-  const loginHandler = async () => {
+  const loginHandler = async (e) => {
+    e.preventDefault()
     if (!email) {
       ToastAlert({
         type: "error",
@@ -27,7 +28,7 @@ const Login = () => {
       });
       return;
     }
-
+    
     if (!password) {
       ToastAlert({
         type: "error",
@@ -90,53 +91,63 @@ const Login = () => {
             <Grid size={7}>
               <Box
                 sx={{
-                  display: "flex",
-                  justifyContent: "center",
                   gap: "20px",
                   height: "100%",
-                  flexDirection: "column",
                   padding: "30px",
                 }}
               >
-                <Typography
-                  variant="h4"
-                  textAlign={"center"}
-                  fontWeight={"bold"}
-                >
-                  Login Form
-                </Typography>
-                <TextField
-                  label="Enter Email"
-                  placeholder="Enter Email"
-                  variant="outlined"
-                  required
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                  }}
-                />
-                <TextField
-                  label="Enter Password"
-                  placeholder="Enter Password"
-                  variant="outlined"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
-                />
-                <Typography variant="body2">
-                  not have an account please? <Link to={"/signup"}>SignUp</Link>
-                </Typography>
-                <Button
-                  onClick={loginHandler}
-                  variant="contained"
-                  sx={{ padding: "10px 0", display: "flex", gap: "10px" }}
-                >
-                  {isLoading && <CircularProgress color="white" size={20} />}
-                  Login
-                </Button>
+                <form onSubmit={loginHandler}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "20px",
+                    }}
+                  >
+                    <Typography
+                      variant="h4"
+                      textAlign={"center"}
+                      fontWeight={"bold"}
+                    >
+                      Login Form
+                    </Typography>
+                    <TextField
+                      label="Enter Email"
+                      placeholder="Enter Email"
+                      variant="outlined"
+                      required
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                      }}
+                    />
+                    <TextField
+                      label="Enter Password"
+                      placeholder="Enter Password"
+                      variant="outlined"
+                      type="password"
+                      required
+                      value={password}
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                      }}
+                    />
+                    <Typography variant="body2">
+                      not have an account please?{" "}
+                      <Link to={"/signup"}>SignUp</Link>
+                    </Typography>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{ padding: "10px 0", display: "flex", gap: "10px" }}
+                    >
+                      {isLoading && (
+                        <CircularProgress color="white" size={20} />
+                      )}
+                      Login
+                    </Button>
+                  </Box>
+                </form>
               </Box>
             </Grid>
           </Grid>

@@ -17,11 +17,11 @@ import { db } from "../Fireabse";
 import BasicModal from "./Modal";
 import { useState } from "react";
 
-const Cards = ({obj,  fetchData , actionBtn }) => {
-  console.log(obj)
+const Cards = ({obj, setRefresh , actionBtn }) => {
   const [modal, setModel] = useState(false);
   const handleOpen = () => {
     setModel(true);
+  
   };
   const handleClose = () => {
     setModel(false);
@@ -32,17 +32,17 @@ const Cards = ({obj,  fetchData , actionBtn }) => {
     e.preventDefault();
     handleOpen();
   };
+  
 
   const deleteHandler = async (e) => {
     e.stopPropagation(); // prevents Link from triggering
     e.preventDefault(); // prevents Link navigation
     await deleteDoc(doc(db, "Blogs", obj.id));
-    fetchData();
+    setRefresh((prev)=> !prev);
   };
 
   return (
     <Grid size={12}>
-      <Link to={`/blog/${obj.id}`} style={{ textDecoration: "none" }}>
         <Card
           elevation={4}
           sx={{
@@ -118,15 +118,13 @@ const Cards = ({obj,  fetchData , actionBtn }) => {
               <Typography variant="caption" color="text.secondary">
                 Posted by{" "}
                 <Typography component="span" fontWeight="bold">
-                  {JSON.parse(
-                    localStorage.getItem("user")
-                  ).fullName.toUpperCase()}
+                  {obj.fullName}
                 </Typography>
               </Typography>
             </Box>
           </CardContent>
         </Card>
-      </Link>
+      {/* </Link> */}
       <BasicModal
         open={modal}
         close={handleClose}
@@ -134,7 +132,7 @@ const Cards = ({obj,  fetchData , actionBtn }) => {
         subject={obj.blogSubject}
         content={obj.blogContent}
         ID={obj.id}
-        fetchData={fetchData}
+        setRefresh={setRefresh}
       />
     </Grid>
   );

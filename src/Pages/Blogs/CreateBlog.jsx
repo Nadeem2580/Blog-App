@@ -16,6 +16,7 @@ import axios from "axios";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../Fireabse";
 import Navbar from "../../Component/Navbar";
+import { Navigate, useNavigate } from "react-router-dom";
 const Secret_Key = `TnvXHWhhxJlZVCGWzyBZ_oRfpUQ`;
 const CLOUD_NAME = `dihxsnmam`;
 
@@ -27,11 +28,14 @@ const CreateBlog = () => {
   const [isPrivate, setIsPrivate] = useState(false);
   const [blogImage, setBlogImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+const navigate = useNavigate()
+
+
   const imageHandler = () => {
     inputRef.current.click();
   };
-
   const blogHandler = async () => {
+
     if ((!title, !subject, !blog)) {
       ToastAlert({
         type: "error",
@@ -66,13 +70,13 @@ const CreateBlog = () => {
           blogContent: blog,
           status: isPrivate,
           blogImage: url,
-          UId: JSON.parse(localStorage.getItem("user")).uid
+          UId: JSON.parse(localStorage.getItem("user")).uid,
+          fullName : JSON.parse(localStorage.getItem("user")).fullName
         };
         const docRef = await addDoc(collection(db, "Blogs"), dataObj);
-        console.log(docRef, "docRef");
         ToastAlert({
           type: "success",
-          message: "image uploaded",
+          message: "Blog Created",
         });
 
         setBlog("");
@@ -81,6 +85,7 @@ const CreateBlog = () => {
         setSubject("");
         setTitle("");
         setIsLoading(false);
+        navigate("/blog")
       } catch (error) {
         setIsLoading(false);
         ToastAlert({
@@ -162,6 +167,7 @@ const CreateBlog = () => {
             }}
           />
           <Button
+          disabled={isLoading}
             onClick={blogHandler}
             variant="contained"
             sx={{ padding: "10px 0", display: "flex", gap: "10px" }}

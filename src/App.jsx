@@ -38,6 +38,7 @@ function App() {
         <Route element={<RoleBaseRoute />}>
           <Route path="/adminDashboard/Dashboard" element={<AdminDashboard />}/>
           <Route path="/adminDashboard/Dashboard/allBlogs" element={<AdminBlogs />}/>
+          <Route path="/adminDashboard/blog/:id" element={<SingleBlog />} />
           
           
           

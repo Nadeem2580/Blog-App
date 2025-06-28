@@ -7,6 +7,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import { use, useEffect, useState } from "react";
 import { auth, db } from "../../Fireabse";
@@ -49,7 +50,7 @@ const AdminDashboard = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {user.map((user, index) => (
+            {user.length > 0 ?user.map((user, index) => (
               <TableRow
                 key={index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -68,7 +69,14 @@ const AdminDashboard = () => {
                   }
                 </TableCell>
               </TableRow>
-            ))}
+            )) : (
+              <TableCell colSpan={4}>
+
+                        <Typography variant="h5" color="error" sx={{ mx: "auto", mt: 4 , textAlign:"center" }}>
+                          No blog posts available.
+                        </Typography>
+              </TableCell>
+                      )}
           </TableBody>
         </Table>
       </TableContainer>

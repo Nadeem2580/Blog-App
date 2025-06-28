@@ -19,7 +19,7 @@ import ListItemText from "@mui/material/ListItemText";
 import blogImg from "../assets/blogs.png";
 import usersImg from "../assets/users.png";
 import logout from "../assets/logout.webp";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // 🔁 Changed from Navigate to useNavigate
 
 const drawerWidth = 240;
 
@@ -49,74 +49,63 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
-})(({ theme }) => ({
+})(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  variants: [
-    {
-      props: ({ open }) => open,
-      style: {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(["width", "margin"], {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-      },
-    },
-  ],
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
 }));
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
-})(({ theme }) => ({
+})(({ theme, open }) => ({
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
-  variants: [
-    {
-      props: ({ open }) => open,
-      style: {
-        ...openedMixin(theme),
-        "& .MuiDrawer-paper": openedMixin(theme),
-      },
-    },
-    {
-      props: ({ open }) => !open,
-      style: {
-        ...closedMixin(theme),
-        "& .MuiDrawer-paper": closedMixin(theme),
-      },
-    },
-  ],
+  ...(open && {
+    ...openedMixin(theme),
+    "& .MuiDrawer-paper": openedMixin(theme),
+  }),
+  ...(!open && {
+    ...closedMixin(theme),
+    "& .MuiDrawer-paper": closedMixin(theme),
+  }),
 }));
 
 export default function SideBar({ children }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate(); // ✅ Added
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+  const handleDrawerOpen = () => setOpen(true);
+  const handleDrawerClose = () => setOpen(false);
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
-  const singout = ()=>{
+  const signout = () => {
     localStorage.clear();
-    <Navigate to="/" />
-  }
+    navigate("/"); // ✅ Navigate on logout
+  };
+
+  // ✅ Updated: Added `icon` property to each item
+  const menuItems = [
+    { title: "All Users", url: "/adminDashboard/Dashboard", icon: usersImg },
+    { title: "All Blog", url: "/adminDashboard/Dashboard/allBlogs", icon: blogImg },
+    { title: "Signout", url: "/", icon: logout },
+  ];
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -129,9 +118,7 @@ export default function SideBar({ children }) {
             onClick={handleDrawerOpen}
             edge="start"
             sx={[
-              {
-                marginRight: 5,
-              },
+              { marginRight: 5 },
               open && { display: "none" },
             ]}
           >
@@ -145,90 +132,53 @@ export default function SideBar({ children }) {
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
+            {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
         <List>
-          {[
-            { title: "All Users", url: "/adminDashboard/Dashboard" },
-            { title: "All Blog", url: "/adminDashboard/Dashboard/allBlogs" },
-            {title : "Signout" , url : "/"}
-          ].map((text, index) => (
+          {menuItems.map((item, index) => (
             <ListItem key={index} disablePadding sx={{ display: "block" }}>
               <ListItemButton
-                sx={[
-                  {
-                    minHeight: 48,
-                    px: 2.5,
-                  },
-                  open
-                    ? {
-                        justifyContent: "initial",
-                      }
-                    : {
-                        justifyContent: "center",
-                      },
-                ]}
+                onClick={item.title === "Signout" ? signout : null} // ✅ Signout handler
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
               >
                 <ListItemIcon
-                  sx={[
-                    {
-                      minWidth: 0,
-                      justifyContent: "center",
-                    },
-                    open
-                      ? {
-                          mr: 3,
-                        }
-                      : {
-                          mr: "auto",
-                        },
-                  ]}
+                  sx={{
+                    minWidth: 0,
+                    justifyContent: "center",
+                    mr: open ? 3 : "auto",
+                  }}
                 >
-                  {index % 2 === 0 ? (
-                    <Link to={text.url}> 
-                    <img
-                      src={usersImg}
-                      alt=""
-                      style={{ width: "30px", height: "30px", marginLeft:"50px" }}
-                      />
-                      </Link>
-                  ) : (
-                    <Link to={text.url}>
-                      <img
-                        src={blogImg}
-                        alt=""
-                        style={{ width: "30px", height: "30px" , marginLeft:"50px"}}
-                      />
+               <Link to={item.url}>
+                  <img
+                    src={item.icon}
+                    alt=""
+                    style={{
+                      width: "30px",
+                      height: "30px",
+                    }}
+                    />
                     </Link>
-                  )}
                 </ListItemIcon>
-                <Link to={text.url}>
-                  <ListItemText 
-                  onClick={text.title == "Signout" ? singout :null}
-                    primary={text.title}
-                    sx={[
-                      open
-                        ? {
-                            opacity: 1,
-                          }
-                        : {
-                            opacity: 0,
-                          },
-                    ]}
-                  />
-                </Link>
+                {open && (
+                  item.title === "Signout" ? (
+                    <ListItemText primary={item.title} />
+                  ) : (
+                    <Link to={item.url} style={{ textDecoration: "none", color: "inherit" }}>
+                      <ListItemText primary={item.title} />
+                    </Link>
+                  )
+                )}
               </ListItemButton>
             </ListItem>
           ))}
         </List>
       </Drawer>
-
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         {children}

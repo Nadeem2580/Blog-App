@@ -14,6 +14,7 @@ import { ToastAlert } from "../../Utils/Utility";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../Fireabse";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useForm } from "react-hook-form";
 const Signup = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,7 +23,15 @@ const Signup = () => {
   const [isloading, setIsloading] = useState(false);
   const navigate = useNavigate();
 
-  const signUpHandler = async () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const signUpHandler = async (e) => {
+    e.preventDefault()
     if (!fullName || !email || !password || !confirmPass) {
       ToastAlert({
         type: "error",
@@ -70,13 +79,13 @@ const Signup = () => {
         password
       );
       const uid = response.user.uid;
-      
-     const dataSendToFirebase =  await setDoc(doc(db, "users", uid), {
+
+      const dataSendToFirebase = await setDoc(doc(db, "users", uid), {
         fullName,
         email,
-        type : "user",
-        isLogin : true,
-        uid
+        type: "user",
+        isLogin: true,
+        uid,
       });
       ToastAlert({
         type: "success",
@@ -124,26 +133,29 @@ const Signup = () => {
                   display: "flex",
                   gap: "20px",
                   flexDirection: "column",
-                  padding: { sm: "5px",  md: "20px", lg: "30px" },
+                  padding: { sm: "5px", md: "20px", lg: "30px" },
                 }}
-              >
+                >
+                <form onSubmit={signUpHandler}>
+                <Box sx={{display:"flex",flexDirection:"column",gap:"20px"}}>
+
                 <Typography
                   variant="h4"
                   textAlign={"center"}
                   fontWeight={"bold"}
-                >
+                  >
                   Sign-Up Form
                 </Typography>
                 <TextField
                   label="Enter Full Name"
                   placeholder="Enter Full Name"
                   variant="outlined"
-                  required
+                  {...register("email" , {required :true})}
                   value={fullName}
                   onChange={(e) => {
                     setFullName(e.target.value);
                   }}
-                />
+                  />
                 <TextField
                   label="Enter Email"
                   placeholder="Enter Email"
@@ -180,6 +192,7 @@ const Signup = () => {
                   Already have an account please? <Link to={"/"}>Login</Link>
                 </Typography>
                 <Button
+                type="submit"
                   variant="contained"
                   sx={{ padding: "10px 0" }}
                   onClick={signUpHandler}
@@ -187,6 +200,9 @@ const Signup = () => {
                   {isloading && <CircularProgress color="white" size={20} />}
                   Sign Up
                 </Button>
+
+                </Box>
+                  </form>
               </Box>
             </Grid>
           </Grid>
